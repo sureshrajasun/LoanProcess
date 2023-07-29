@@ -21,7 +21,7 @@ public class WorkflowTest extends AbstractProcessEngineRuleTest {
   @Test
   public void shouldExecuteHappyPath() {
     // given
-    String processDefinitionKey = "camunda-first-project-process";
+    String processDefinitionKey = "Loan_Approval_Process_by_Type";
 
     // when
     ProcessInstance processInstance = runtimeService.startProcessInstanceByKey(processDefinitionKey);
@@ -29,8 +29,7 @@ public class WorkflowTest extends AbstractProcessEngineRuleTest {
     // then
     assertThat(processInstance).isStarted()
         .task()
-        .hasDefinitionKey("say-hello")
-        .hasCandidateUser("demo")
+        .hasDefinitionKey("Activity_1kcd4a6")
         .isNotAssigned();
   }
 
