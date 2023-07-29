@@ -13,7 +13,7 @@ import org.springframework.context.event.EventListener;
 import org.springframework.web.client.RestTemplate;
 
 @SpringBootApplication
-@EnableProcessApplication("Loan_Process_2")
+@EnableProcessApplication("Loan_Approval_Process_by_Type")
 public class LoanProcessApplication {
 
   protected static Logger LOG = LoggerFactory.getLogger(LoanProcessApplication.class);
