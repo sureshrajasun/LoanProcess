@@ -1,6 +1,19 @@
-camunda.bpm.admin-user:
-  id: demo
-  password: demo
+camunda.bpm:
+  admin-user:
+    id: demo
+    password: demo
+  client:
+    base-url: http://localhost:8282/engine-rest # The URL pointing to the Camunda Platform Runtime REST API
+    async-response-timeout: 1000 # Defines the maximum duration of the long-polling request
+    worker-id: spring-boot-client # Identifies the worker towards the Engine
+    #      basic-auth: # Configure if REST API is secured with basic authentication
+    #        username: my-username
+    #        password: my-password
+    subscriptions:
+      loanDispatch:
+        lock-duration: 10000 # Defines for how long the External Tasks are locked until they can be fetched again
+        process-definition-key: Loan_Process_2 # Filters for External Tasks of this key
+        auto-open: false # Defines whether the subscription is opened automatically or not
 
 spring:
   datasource:
@@ -24,4 +37,4 @@ server:
 
 logging:
   level:
-    root: debug
+    root: info
