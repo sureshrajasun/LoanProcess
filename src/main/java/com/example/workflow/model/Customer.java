@@ -13,7 +13,7 @@ public class Customer {
 
     private String name;
     private long age;
-    private String loan_type;
-    private long loan_amount;
+    private String loanType;
+    private long loanAmount;
 
 }
