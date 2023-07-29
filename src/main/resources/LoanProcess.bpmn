@@ -28,7 +28,7 @@
       <bpmn:incoming>Flow_0dp21zu</bpmn:incoming>
     </bpmn:serviceTask>
   </bpmn:process>
-  <bpmn:message id="Message_0lve2x1" name="Msg-StartLoanProcess" />
+  <bpmn:message id="Message_0lve2x1" name="Msg-StartLoanProcess11" />
   <bpmn:message id="Message_1p5cxc3" />
   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
     <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="Loan_Process_1">

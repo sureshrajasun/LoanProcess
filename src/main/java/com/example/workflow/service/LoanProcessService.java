@@ -1,5 +1,6 @@
 package com.example.workflow.service;
 
+import com.example.workflow.model.Customer;
 import com.example.workflow.model.EmploymentDetails;
 import com.example.workflow.model.LoanProcessResponse;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -33,6 +34,29 @@ public class LoanProcessService {
 
         loanProcessResponse.setApplicationId(instanceId);
         loanProcessResponse.setMessage("Process has been created successfully..");
+        loanProcessResponse.setInstanceId(instanceId);
+        loanProcessResponse.setStatus(HttpStatus.CREATED);
+        return loanProcessResponse;
+    }
+
+    public LoanProcessResponse startProcessByLoanType(Customer customer) throws JsonProcessingException {
+        LoanProcessResponse loanProcessResponse = new LoanProcessResponse();
+        ObjectMapper objectMapper = new ObjectMapper();
+        String customerObj = objectMapper.writeValueAsString(customer);
+
+        ObjectValue empValue = Variables.objectValue(customer)
+                .serializationDataFormat("application/json")
+                .create();
+
+        String instanceId = runtimeService.createMessageCorrelation("Msg-StartLoanProcess")
+                .setVariable("empJsonString", customerObj)
+                .setVariable("empSerializedObj", empValue)
+                .setVariable("loan_type", customer.getLoan_type())
+                .setVariable("empJavaObj", customer)
+                .correlateStartMessage().getProcessInstanceId();
+
+        loanProcessResponse.setApplicationId(instanceId);
+        loanProcessResponse.setMessage("Loan Type Process has been created successfully..");
         loanProcessResponse.setInstanceId(instanceId);
         loanProcessResponse.setStatus(HttpStatus.CREATED);
         return loanProcessResponse;

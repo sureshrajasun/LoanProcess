@@ -1,5 +1,6 @@
 package com.example.workflow.controller;
 
+import com.example.workflow.model.Customer;
 import com.example.workflow.model.EmploymentDetails;
 import com.example.workflow.model.LoanProcessResponse;
 import com.example.workflow.service.LoanProcessService;
@@ -25,6 +26,12 @@ public class LoanProcessController {
     @PostMapping("/startLoanProcessByKey")
     public ResponseEntity<LoanProcessResponse> startProcessByKey(@RequestBody EmploymentDetails employmentDetails) throws JsonProcessingException {
         LoanProcessResponse loanProcessResponse = loanProcessService.startProcessInstanceByKey(employmentDetails);
+        return new ResponseEntity<>(loanProcessResponse,HttpStatus.CREATED);
+    }
+
+    @PostMapping("/startLoanProcessByType")
+    public ResponseEntity<LoanProcessResponse> startProcessByKey(@RequestBody Customer customer) throws JsonProcessingException {
+        LoanProcessResponse loanProcessResponse = loanProcessService.startProcessByLoanType(customer);
         return new ResponseEntity<>(loanProcessResponse,HttpStatus.CREATED);
     }
 }
