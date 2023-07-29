@@ -26,10 +26,13 @@ public class LoanProcessService {
                 .create();
 
         String instanceId = runtimeService.createMessageCorrelation("Msg-StartLoanProcess")
-                .setVariable("empJsonString", customerObj)
-                .setVariable("empSerializedObj", empValue)
-                .setVariable("loan_type", customer.getLoanType())
-                .setVariable("empJavaObj", customer)
+                .setVariable("name", customer.getName())
+                .setVariable("age", customer.getAge())
+                .setVariable("loanType", customer.getLoanType())
+                .setVariable("loanAmount", customer.getLoanAmount())
+                .setVariable("customerObj", customerObj)
+                .setVariable("customerJson", empValue)
+                .setVariable("customerJavaObj", customer)
                 .correlateStartMessage().getProcessInstanceId();
 
         loanProcessResponse.setApplicationId(instanceId);
