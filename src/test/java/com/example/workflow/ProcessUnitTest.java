@@ -1,0 +1,157 @@
+package com.example.workflow;
+
+import javax.annotation.PostConstruct;
+
+
+import lombok.Data;
+import org.apache.ibatis.logging.LogFactory;
+import org.camunda.bpm.engine.ProcessEngine;
+import org.camunda.bpm.engine.RuntimeService;
+import org.camunda.bpm.engine.TaskService;
+import org.camunda.bpm.engine.runtime.EventSubscription;
+import org.camunda.bpm.engine.runtime.Execution;
+import org.camunda.bpm.engine.runtime.Job;
+import org.camunda.bpm.engine.runtime.MessageCorrelationResult;
+import org.camunda.bpm.engine.runtime.MessageCorrelationResultWithVariables;
+import org.camunda.bpm.engine.runtime.ProcessInstance;
+import org.camunda.bpm.engine.runtime.ProcessInstanceWithVariables;
+import org.camunda.bpm.engine.test.Deployment;
+import org.camunda.bpm.engine.test.ProcessEngineRule;
+import org.camunda.bpm.extension.process_test_coverage.junit.rules.TestCoverageProcessEngineRuleBuilder;
+import org.junit.Before;
+import org.junit.ClassRule;
+import org.junit.Rule;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
+import org.springframework.test.context.junit4.SpringRunner;
+
+
+
+import static org.camunda.bpm.engine.test.assertions.ProcessEngineTests.*;
+import static org.camunda.bpm.engine.test.assertions.bpmn.BpmnAwareTests.assertThat;
+import static org.camunda.bpm.engine.test.assertions.bpmn.BpmnAwareTests.execute;
+import static org.camunda.bpm.engine.test.assertions.bpmn.BpmnAwareTests.job;
+import static org.camunda.bpm.engine.test.assertions.bpmn.BpmnAwareTests.jobQuery;
+import static org.junit.Assert.*;
+
+import java.util.HashMap;
+import java.util.Map;
+
+import static org.assertj.core.api.Assertions.*;
+
+
+
+
+/**
+ * Test case starting an in-memory database-backed Process Engine.
+ */
+@RunWith(SpringRunner.class)
+@SpringBootTest
+public class ProcessUnitTest {
+
+
+
+    @Autowired
+    private ProcessEngine processEngine;
+
+
+
+    static {
+        LogFactory.useSlf4jLogging(); // MyBatis
+    }
+
+
+
+  /*  @ClassRule
+    @Rule
+    public static ProcessEngineRule rule;*/
+
+
+
+  /*  @PostConstruct
+    void initRule() {
+        rule = TestCoverageProcessEngineRuleBuilder.create(processEngine).build();
+    }*/
+
+
+
+    @Before
+    public void setup() {
+        init(processEngine);
+    }
+
+
+    @Test
+    public void DefaultPath() {
+
+        InputMock info = new InputMock();
+        info.setImplementationType("Default Path");
+        Map<String,Object> variables = new HashMap<>();
+        variables.put("info", info);
+
+        ProcessInstance processInstance = processEngine().getRuntimeService().startProcessInstanceByKey("Loan_Approval_Process_by_Type", variables);
+
+        assertThat(processInstance).hasNotPassed("MockScriptTask").isStarted();
+
+
+
+    }
+
+
+    @Test
+    public void AlternativePath() {
+        RuntimeService runtimeService = processEngine().getRuntimeService();
+        //TaskService taskService = rule.getTaskService();
+
+        InputMock info = new InputMock();
+        info.setImplementationType("Alternative Path");
+        info.setImplementationValue("mockActivity");
+        boolean msgListenerSet = true;
+        Map<String,Object> variables = new HashMap<>();
+        variables.put("info", info);
+        variables.put("msgListenerSet", msgListenerSet);
+
+
+        ProcessInstance processInstance = processEngine().getRuntimeService()
+                .startProcessInstanceByKey("Loan_Approval_Process_by_Type", "10", variables);
+
+
+        assertThat(processInstance).isStarted().isWaitingAt("CompleteReceiveTaskTask");
+
+//	 Completing the job explicitly
+        Job receiveTaskJob = job(jobQuery().messages().executable().activityId("CompleteReceiveTaskTask"), processInstance);
+        assertThat(receiveTaskJob).isNotNull();
+        execute(receiveTaskJob);
+
+
+//	  1st Approach
+        runtimeService.createMessageCorrelation("completeTask")
+                .processInstanceBusinessKey("10")
+                .correlate();
+//
+//
+//
+//	 //2nd Approach
+//	 EventSubscription subscription = runtimeService.createEventSubscriptionQuery()
+//			  .processInstanceId(processInstance.getId()).eventType("message").singleResult();
+//	 runtimeService.messageEventReceived("completeTask", subscription.getExecutionId());
+//
+//	 //3rd Approach
+//	 runtimeService.createExecutionQuery()
+//			  .messageEventSubscriptionName("completeTask")
+//			  .singleResult();
+//
+
+
+        assertThat(processInstance).isStarted().isNotWaitingAt("CompleteReceiveTaskTask");
+        assertThat(processInstance).isEnded();
+
+
+    }
+
+
+}
+
