@@ -1,7 +1,7 @@
 package com.example.workflow;
 
 import static org.camunda.bpm.engine.test.assertions.bpmn.BpmnAwareTests.*;
-import static org.camunda.bpm.extension.mockito.DelegateExpressions.autoMock;
+//import static org.camunda.bpm.extension.mockito.DelegateExpressions.autoMock;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.when;
 
@@ -30,7 +30,7 @@ public class SampleProcessTest extends AbstractProcessEngineRuleTest {
     private ProcessScenario insuranceApplication;
     @Test
     public void start_and_finish_process() throws InterruptedException {
-        autoMock("LoanProcessByType.bpmn");
+        //autoMock("LoanProcessByType.bpmn");
 
         // given
         when(insuranceApplication.waitsAtServiceTask("dispatchActivity")).thenReturn(externalTaskDelegate -> {
