@@ -141,6 +141,19 @@
             <version>0.3.2</version>
         </dependency>
         <!-- Thanks for using https://jar-download.com -->
+        <!-- https://mvnrepository.com/artifact/org.camunda.bpm.extension.mockito/camunda-bpm-mockito -->
+        <dependency>
+            <groupId>org.camunda.bpm.extension.mockito</groupId>
+            <artifactId>camunda-bpm-mockito</artifactId>
+            <version>5.16.0</version>
+
+        </dependency>
+        <dependency>
+            <groupId>org.camunda.bpm.extension</groupId>
+            <artifactId>camunda-bpm-assert-scenario</artifactId>
+            <version>0.2</version>
+            <scope>test</scope>
+        </dependency>
 
 
     </dependencies>

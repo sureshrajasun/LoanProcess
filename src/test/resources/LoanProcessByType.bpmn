@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_0tyfe0t" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="4.12.0" modeler:executionPlatform="Camunda Platform" modeler:executionPlatformVersion="7.15.0">
   <bpmn:process id="Loan_Approval_Process_by_Type" name="LoanApprovalProcessByType" isExecutable="true">
-    <bpmn:userTask id="Activity_1kcd4a6" name="BasicCheck">
+    <bpmn:userTask id="BasicCheckActivity" name="BasicCheck">
       <bpmn:incoming>Flow_01htt3s</bpmn:incoming>
       <bpmn:outgoing>Flow_079qrl5</bpmn:outgoing>
     </bpmn:userTask>
@@ -19,33 +19,33 @@
       <bpmn:incoming>Flow_1nbcx1u</bpmn:incoming>
       <bpmn:outgoing>Flow_1etmzoq</bpmn:outgoing>
     </bpmn:userTask>
-    <bpmn:userTask id="Activity_0mzrt6m" name="Personal Loan">
+    <bpmn:userTask id="personalLoanActivity" name="Personal Loan">
       <bpmn:incoming>Flow_0lgltpf</bpmn:incoming>
       <bpmn:outgoing>Flow_07t7em4</bpmn:outgoing>
     </bpmn:userTask>
     <bpmn:endEvent id="Event_1d5kbmy">
       <bpmn:incoming>Flow_0rz67pq</bpmn:incoming>
     </bpmn:endEvent>
-    <bpmn:sequenceFlow id="Flow_079qrl5" sourceRef="Activity_1kcd4a6" targetRef="Gateway_1aibksu" />
+    <bpmn:sequenceFlow id="Flow_079qrl5" sourceRef="BasicCheckActivity" targetRef="Gateway_1aibksu" />
     <bpmn:sequenceFlow id="Flow_19n15r1" sourceRef="Gateway_1aibksu" targetRef="Activity_1lcslcl">
-      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${loan_type=="HL"}</bpmn:conditionExpression>
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${loanType=="HL"}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
     <bpmn:sequenceFlow id="Flow_1nbcx1u" sourceRef="Gateway_1aibksu" targetRef="Activity_1bqyrs6">
-      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${loan_type=="EL"}</bpmn:conditionExpression>
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${loanType=="EL"}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
-    <bpmn:sequenceFlow id="Flow_0lgltpf" sourceRef="Gateway_1aibksu" targetRef="Activity_0mzrt6m">
-      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${Loan_Type=="PL"}</bpmn:conditionExpression>
+    <bpmn:sequenceFlow id="Flow_0lgltpf" sourceRef="Gateway_1aibksu" targetRef="personalLoanActivity">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${loanType=="PL"}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
-    <bpmn:sequenceFlow id="Flow_0li9wrw" sourceRef="Activity_1lcslcl" targetRef="Activity_1a569qn" />
-    <bpmn:sequenceFlow id="Flow_1etmzoq" sourceRef="Activity_1bqyrs6" targetRef="Activity_1a569qn" />
-    <bpmn:sequenceFlow id="Flow_07t7em4" sourceRef="Activity_0mzrt6m" targetRef="Activity_1a569qn" />
-    <bpmn:sequenceFlow id="Flow_0rz67pq" sourceRef="Activity_1a569qn" targetRef="Event_1d5kbmy" />
+    <bpmn:sequenceFlow id="Flow_0li9wrw" sourceRef="Activity_1lcslcl" targetRef="dispatchActivity" />
+    <bpmn:sequenceFlow id="Flow_1etmzoq" sourceRef="Activity_1bqyrs6" targetRef="dispatchActivity" />
+    <bpmn:sequenceFlow id="Flow_07t7em4" sourceRef="personalLoanActivity" targetRef="dispatchActivity" />
+    <bpmn:sequenceFlow id="Flow_0rz67pq" sourceRef="dispatchActivity" targetRef="Event_1d5kbmy" />
     <bpmn:startEvent id="Event_1jzpvyk" name="Loan Process">
       <bpmn:outgoing>Flow_01htt3s</bpmn:outgoing>
       <bpmn:messageEventDefinition id="MessageEventDefinition_07wv6do" messageRef="Message_0lve2x1" />
     </bpmn:startEvent>
-    <bpmn:sequenceFlow id="Flow_01htt3s" sourceRef="Event_1jzpvyk" targetRef="Activity_1kcd4a6" />
-    <bpmn:serviceTask id="Activity_1a569qn" name="Dispatch" camunda:type="external" camunda:topic="loanDispatch">
+    <bpmn:sequenceFlow id="Flow_01htt3s" sourceRef="Event_1jzpvyk" targetRef="BasicCheckActivity" />
+    <bpmn:serviceTask id="dispatchActivity" name="Dispatch" camunda:type="external" camunda:topic="loanDispatch">
       <bpmn:incoming>Flow_07t7em4</bpmn:incoming>
       <bpmn:incoming>Flow_1etmzoq</bpmn:incoming>
       <bpmn:incoming>Flow_0li9wrw</bpmn:incoming>
@@ -54,7 +54,7 @@
     <bpmn:textAnnotation id="TextAnnotation_1kyayh2">
       <bpmn:text>Topic name: loanDispatch</bpmn:text>
     </bpmn:textAnnotation>
-    <bpmn:association id="Association_0j6w1bl" sourceRef="Activity_1a569qn" targetRef="TextAnnotation_1kyayh2" />
+    <bpmn:association id="Association_0j6w1bl" sourceRef="dispatchActivity" targetRef="TextAnnotation_1kyayh2" />
   </bpmn:process>
   <bpmn:message id="Message_0lve2x1" name="Msg-StartLoanProcess" />
   <bpmn:message id="Message_1p5cxc3" />
@@ -105,7 +105,7 @@
         <di:waypoint x="215" y="120" />
         <di:waypoint x="270" y="120" />
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNShape id="Activity_1kcd4a6_di" bpmnElement="Activity_1kcd4a6">
+      <bpmndi:BPMNShape id="BasicCheckActivity_di" bpmnElement="BasicCheckActivity">
         <dc:Bounds x="270" y="80" width="100" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Gateway_1aibksu_di" bpmnElement="Gateway_1aibksu" isMarkerVisible="true">
@@ -117,7 +117,7 @@
       <bpmndi:BPMNShape id="Activity_1bqyrs6_di" bpmnElement="Activity_1bqyrs6">
         <dc:Bounds x="530" y="193" width="100" height="80" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_0mzrt6m_di" bpmnElement="Activity_0mzrt6m">
+      <bpmndi:BPMNShape id="personalLoanActivity_di" bpmnElement="personalLoanActivity">
         <dc:Bounds x="530" y="303" width="100" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Event_1d5kbmy_di" bpmnElement="Event_1d5kbmy">
@@ -129,7 +129,7 @@
           <dc:Bounds x="166" y="145" width="68" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_1qr121x_di" bpmnElement="Activity_1a569qn">
+      <bpmndi:BPMNShape id="Activity_1qr121x_di" bpmnElement="dispatchActivity">
         <dc:Bounds x="790" y="173" width="100" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="Association_0j6w1bl_di" bpmnElement="Association_0j6w1bl">

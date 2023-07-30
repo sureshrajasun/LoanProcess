@@ -8,6 +8,7 @@ import org.apache.ibatis.logging.LogFactory;
 import org.camunda.bpm.engine.ProcessEngine;
 import org.camunda.bpm.engine.RuntimeService;
 import org.camunda.bpm.engine.TaskService;
+import org.camunda.bpm.engine.impl.persistence.entity.ProcessInstanceWithVariablesImpl;
 import org.camunda.bpm.engine.runtime.EventSubscription;
 import org.camunda.bpm.engine.runtime.Execution;
 import org.camunda.bpm.engine.runtime.Job;
@@ -94,9 +95,21 @@ public class ProcessUnitTest {
 
         ProcessInstance processInstance = processEngine().getRuntimeService().startProcessInstanceByKey("Loan_Approval_Process_by_Type", variables);
 
-        assertThat(processInstance).hasNotPassed("MockScriptTask").isStarted();
+        assertThat(processInstance).hasNotPassed("BasicCheckActivity").isStarted().isWaitingAt("BasicCheckActivity");
 
 
+        //	 Completing the job explicitly
+        Job receiveTaskJob = job(jobQuery().messages().executable().activityId("BasicCheckActivity"), processInstance);
+        assertThat(receiveTaskJob).isNotNull();
+        execute(receiveTaskJob);
+
+
+//	  1st Approach
+    /*    processEngine().getRuntimeService().createMessageCorrelation("completeTask")
+                .processInstanceBusinessKey(ProcessConstants.PROCESS_BUSINESS_KEY)
+                .correlate();*/
+
+      //  assertThat(processInstance).isStarted().isWaitingAt("CompleteReceiveTaskTask");
 
     }
 

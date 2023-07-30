@@ -29,7 +29,7 @@ public class WorkflowTest extends AbstractProcessEngineRuleTest {
     // then
     assertThat(processInstance).isStarted()
         .task()
-        .hasDefinitionKey("Activity_1kcd4a6")
+        .hasDefinitionKey("BasicCheckActivity")
         .isNotAssigned();
   }
 
