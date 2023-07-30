@@ -29,9 +29,9 @@ Search the Tasklist, claim the task and Complete it
 
 ![img_2.png](img_2.png)
 
-As per the payload the loan type is "HL" and it will go the Personal Loan process, claim the task and Complete it
+As per the payload the loan type is "PL" and it will go the Personal Loan process, claim the task and Complete it
 
-![img_3.png](img_3.png)
+![img_7.png](img_7.png)
 
 Once the Loan type task completed the flow will move to Dispatch and Email notification. 
 
