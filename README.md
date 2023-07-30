@@ -4,6 +4,10 @@
 
 - Start the application
 
+ `mvn spring-boot:run`
+
+![img_8.png](img_8.png)
+
 - Create Loan Process through postman using below CURL command
 
 curl --location 'http://localhost:8282/api/startLoanProcessByType' \
