@@ -21,18 +21,6 @@ public class LoanProcessApplication {
     SpringApplication.run(LoanProcessApplication.class, args);
   }
 
-  @Bean
-  public RestTemplate restTemplate(){
-    return new RestTemplate();
-  }
-
-/*  @Bean
-  public ExternalTaskClient customClient() {
-    return ExternalTaskClient.create()
-            .baseUrl("http://localhost:8282/engine-rest")
-            .build();
-  }*/
-
   @EventListener(SubscriptionInitializedEvent.class)
   public void catchSubscriptionInitEvent(SubscriptionInitializedEvent event) {
 

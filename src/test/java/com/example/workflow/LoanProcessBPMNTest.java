@@ -24,13 +24,6 @@ public class LoanProcessBPMNTest extends AbstractProcessEngineRuleTest {
     private ProcessScenario insuranceApplication;
     @Test
     public void loanProcessingStartAndFinish() throws InterruptedException {
-        //autoMock("LoanProcessByType.bpmn");
-
-        // given
-       /* when(insuranceApplication.waitsAtServiceTask("dispatchActivity")).thenReturn(externalTaskDelegate -> {
-                    externalTaskDelegate.complete(withVariables("check", true));
-                }
-        );*/
 
         final ProcessInstance processInstance = runtimeService().createMessageCorrelation("Msg-StartLoanProcess")
                 .setVariable("name", "Suresh")
@@ -54,7 +47,6 @@ public class LoanProcessBPMNTest extends AbstractProcessEngineRuleTest {
         externalTaskService().fetchAndLock(10, "externalWorkerId", true)
                 .topic("loanDispatch", 5000L)
                 .execute();
-       // externalTaskService().extendLock(externalTask().getId(),"externalWorkerId",10000);
 
         externalTaskService().complete(externalTask().getId(),"externalWorkerId", new HashMap<>());
 
