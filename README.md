@@ -44,6 +44,9 @@ The Email notification is configured as a Delegate task and both will execute pa
 ![img_5.png](img_5.png)
 
 
+- Unit Test case for the Personal Loan process
+![img_3.png](img_3.png)
+
 # 2. Adult or Child Decision
 - Decision Model Check
 

@@ -20,16 +20,14 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @RunWith(SpringRunner.class)
 public class LoanProcessBPMNTest extends AbstractProcessEngineRuleTest {
 
-    @Mock
-    private ProcessScenario insuranceApplication;
     @Test
     public void loanProcessingStartAndFinish() throws InterruptedException {
 
         final ProcessInstance processInstance = runtimeService().createMessageCorrelation("Msg-StartLoanProcess")
-                .setVariable("name", "Suresh")
-                .setVariable("age", 10)
+                .setVariable("name", "David Smith")
+                .setVariable("age", 40)
                 .setVariable("loanType", "PL")
-                .setVariable("loanAmount", 300)
+                .setVariable("loanAmount", 3200)
                 .correlateStartMessage();
 
         assertThat(processInstance).isWaitingAt("BasicCheckActivity");
