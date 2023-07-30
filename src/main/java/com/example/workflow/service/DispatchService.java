@@ -13,7 +13,7 @@ import org.springframework.stereotype.Service;
 @ExternalTaskSubscription("loanDispatch")
 public class DispatchService implements ExternalTaskHandler {
 
-    protected static Logger LOG = LoggerFactory.getLogger(DispatchService.class);
+    protected static Logger log = LoggerFactory.getLogger(DispatchService.class);
     protected String workerId;
     public DispatchService(ClientProperties properties) {
         workerId = properties.getWorkerId();
@@ -22,8 +22,9 @@ public class DispatchService implements ExternalTaskHandler {
     @Override
     public void execute(ExternalTask externalTask, ExternalTaskService externalTaskService) {
 
+        log.info("!!!!!!!!!!!!!!!!!!!! Dispatch Service Starts !!!!!!!!!!!!!!!!!!!!!!!!!!");
         externalTaskService.complete(externalTask);
-
-        LOG.info("{}: The loan process {} has been approved!", workerId, externalTask.getId());
+        log.info("{}: The loan process {} has been approved!", workerId, externalTask.getId());
+        log.info("!!!!!!!!!!!!!!!!!!!! Dispatch Service Ends !!!!!!!!!!!!!!!!!!!!!!!!!!");
     }
 }

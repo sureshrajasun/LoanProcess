@@ -13,13 +13,13 @@ import static org.camunda.bpm.engine.test.assertions.bpmn.BpmnAwareTests.assertT
 
 @SpringBootTest
 @RunWith(SpringRunner.class)
-public class WorkflowTest extends AbstractProcessEngineRuleTest {
+public class BPMNProcessFlowTest extends AbstractProcessEngineRuleTest {
 
   @Autowired
   public RuntimeService runtimeService;
 
   @Test
-  public void shouldExecuteHappyPath() {
+  public void shouldStartLoanProcessWorkflow() {
     // given
     String processDefinitionKey = "Loan_Approval_Process_by_Type";
 

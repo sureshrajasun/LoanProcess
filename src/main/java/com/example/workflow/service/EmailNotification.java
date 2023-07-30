@@ -12,7 +12,9 @@ public class EmailNotification implements JavaDelegate {
 
     @Override
     public void execute(DelegateExecution delegateExecution) throws Exception {
-            log.info("Email to '{}' is sent successfully with the loan of type '{}' of Amount : {}.",
-                    delegateExecution.getVariable("name"), delegateExecution.getVariable("loanType"), delegateExecution.getVariable("loanAmount") );
+        log.info("################################### Email Notification Starts ######################################");
+        log.info("Email to '{}' is sent successfully with the loan of type '{}' of Amount : {}.",
+                delegateExecution.getVariable("name"), delegateExecution.getVariable("loanType"), delegateExecution.getVariable("loanAmount") );
+        log.info("################################### Email Notification Ends ######################################");
     }
 }
