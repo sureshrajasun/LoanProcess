@@ -2,9 +2,9 @@
 
 
 
+- Start the application
 
-
-**Start Loan Process**
+- Create Loan Process through postman using below CURL command
 
 curl --location 'http://localhost:8282/api/startLoanProcessByType' \
 --header 'Content-Type: application/json' \
@@ -17,7 +17,7 @@ curl --location 'http://localhost:8282/api/startLoanProcessByType' \
 
 ![img.png](img.png)
 
-**Camunda Console**
+- Login to Camunda Console
 
 http://localhost:8282/
 
@@ -25,27 +25,27 @@ Username : demo
 password: demo
 ![img_1.png](img_1.png)
 
-Search the Tasklist, claim the task and Complete it
+- Search the Tasklist, claim the task and Complete it
 
 ![img_2.png](img_2.png)
 
-As per the payload the loan type is "PL" and it will go the Personal Loan process, claim the task and Complete it
+- As per the payload the loan type is "PL" and it will go the Personal Loan process, claim the task and Complete it
 
 ![img_7.png](img_7.png)
 
-Once the Loan type task completed the flow will move to Dispatch and Email notification. 
+- Once the Loan type task completed the flow will move to Dispatch and Email notification. 
 
-The Dispatch task is added as a external task and the task will be added to the 'loanDispatch' topic for the further process.
+- The Dispatch task is added as a external task and the task will be added to the 'loanDispatch' topic for the further process.
 The Email notification is configured as a Delegate task and both will execute parallel.
 
 ![img_4.png](img_4.png)
 
-As part of the Dispatch Service and Email Notification, we could see the below logs in the console.
+- As part of the Dispatch Service and Email Notification, we could see the below logs in the console.
 ![img_5.png](img_5.png)
 
 
 # 2. Adult or Child Decision
-**Decision Model Check**
+- Decision Model Check
 
 curl --location 'http://localhost:8282/engine-rest/decision-definition/key/adult-check/evaluate' \
 --header 'Content-Type: application/json' \
